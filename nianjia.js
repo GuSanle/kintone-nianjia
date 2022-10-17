@@ -26,7 +26,7 @@
         return false;
       }
       // 2 获取年假申请天数
-      const days = Number(record[approveApp.daysField].value);
+      const leftDays = Number(record[approveApp.daysField].value);
       // 3 设置查询年假管理应用的条件
       const thisYear = new Date().getFullYear();
       const query = `${manageApp.userIdField} in ("${userInfo[0].code}") and ${manageApp.yearField} = ${thisYear} limit 1`;
@@ -46,7 +46,7 @@
       }
       // 6 如果剩余年假小于申请的年假数，则提示年假不足
       else if (
-        Number(manageResult.records[0][manageApp.daysField].value) < days
+        Number(manageResult.records[0][manageApp.daysField].value) < leftDays
       ) {
         event.error = "年假不足";
       } else {
@@ -54,7 +54,7 @@
         const manageLeftDays = Number(
           manageResult.records[0][manageApp.daysField].value
         );
-        const newleftDays = manageLeftDays - days;
+        const newleftDays = manageLeftDays - leftDays;
         const updateInfo = {
           app: manageApp.id,
           id: manageResult.records[0].$id.value,
