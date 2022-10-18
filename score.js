@@ -1,0 +1,64 @@
+(function () {
+  "use strict";
+  const spaceIdField = "spaceId";
+  const scoreField = "score";
+  const answerAppId = 1725;
+  const prefix = "a_";
+
+  //获取所有数据
+  const getAllRecords = (app) => {
+    return kintone.api(kintone.api.url("/k/v1/records", true), "GET", {
+      app,
+    });
+  };
+
+  kintone.events.on("app.record.index.show", async (event) => {
+    const setScore = async () => {
+      const app = kintone.app.getId();
+      const { records } = await getAllRecords(app);
+      const { records: answerRecords } = await getAllRecords(answerAppId);
+      const answer = answerRecords[0];
+      const newRecords = records.map((record) => {
+        let score = 0;
+        Object.keys(record).forEach((value) => {
+          if (value.indexOf(prefix) === 0) {
+            if (record[value].value === answer[value].value) {
+              score += 10;
+            }
+          }
+        });
+        return {
+          id: record.$id.value,
+          record: {
+            [scoreField]: {
+              value: score,
+            },
+          },
+        };
+      });
+
+      const updateData = {
+        app,
+        records: newRecords,
+      };
+      await kintone.api(
+        kintone.api.url("/k/v1/records", true),
+        "PUT",
+        updateData
+      );
+    };
+
+    //放置按钮
+    const button = document.createElement("button");
+    button.id = "score";
+    button.innerText = "批改";
+    button.onclick = () => {
+      setScore().then(() => {
+        alert("批改完成");
+        window.location.reload();
+      });
+    };
+    kintone.app.getHeaderSpaceElement().appendChild(button);
+    return event;
+  });
+})();
