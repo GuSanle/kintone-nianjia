@@ -27,7 +27,7 @@
         return false;
       }
       // 4 获取年假申请天数，并且转换成数字
-      const leftDays = ④;
+      const days = ④;
       //5 设置查询年假管理应用的条件--用户id相同，并且年份字段的值为今年
       const thisYear = new Date().getFullYear();
       const query = `${manageApp.userIdField} in ("${userInfo[0].code}") and ⑤ = ${thisYear} limit 1`;
@@ -47,7 +47,7 @@
       }
       // 8 通过剩余年假与申请的年假数，来判断是否还有年假可以申请
       else if (
-        Number(manageResult.records[0][manageApp.daysField].value) ⑧ leftDays
+        Number(manageResult.records[0][manageApp.daysField].value) ⑧ days
       ) {
         event.error = "年假不足";
       } else {
@@ -66,11 +66,10 @@
             },
           },
         };
-        // 通过记录id来更新年假管理应用
+        // 通过记录id来更新年假管理应用  请参考 https://cybozudev.kf5.com/hc/kb/article/1303627/
         return kintone
-          .api(kintone.api.url("/k/v1/record", true), "PUT", updateInfo)
-          .then((resp) => {
-            console.log(resp, "updateInforesp");
+          .api(kintone.api.url("/k/v1/record", true), ⑩, updateInfo)
+          .then(() => {
             alert("更新成功");
             return event;
           });
