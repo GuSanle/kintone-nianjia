@@ -2,8 +2,9 @@
   "use strict";
   const spaceIdField = "spaceId";
   const userField = "user";
-  const statisticsAppId = 1729;
+  const statisticsAppId = 452;
   const prefix = "a_";
+  const token = "wq7qQf05coYQFC1FLms4yE4mwUUKIVU8fxufJjIk";
 
   kintone.events.on(
     ["app.record.create.submit.success", "app.record.edit.submit.success"],
@@ -28,17 +29,21 @@
       });
 
       //根据spaceid查询是否已经有记录
-      const query = `${spaceIdField} = ${spaceId} limit 1`;
-      const params = {
-        app: statisticsAppId,
-        query,
+      const getHeaders = {
+        "X-Cybozu-API-Token": token,
       };
-      const result = await kintone.api(
-        kintone.api.url("/k/v1/records", true),
-        "GET",
-        params
-      );
-      const { records } = result;
+      const query = `${spaceIdField} = "${spaceId}" limit 1`;
+      const url = `${kintone.api.url(
+        "/k/v1/records",
+        true
+      )}?app=${statisticsAppId}&query=${encodeURIComponent(query)}`;
+
+      console.log(url);
+
+      const result = await kintone.proxy(url, "GET", getHeaders, {});
+      console.log(result);
+      const { records } = JSON.parse(result[0]);
+      console.log(records);
 
       //根据查询结果，添加或者更新答案记录
       const method = records.length > 0 ? "PUT" : "POST";
@@ -54,7 +59,16 @@
       } else {
         data.record[spaceIdField] = { value: spaceId };
       }
-      await kintone.api(kintone.api.url("/k/v1/record", true), method, data);
+      const postHeaders = {
+        "Content-Type": "application/json",
+        "X-Cybozu-API-Token": token,
+      };
+      await kintone.proxy(
+        kintone.api.url("/k/v1/record", true),
+        method,
+        postHeaders,
+        data
+      );
       return event;
     }
   );

@@ -2,7 +2,7 @@
   "use strict";
   const spaceIdField = "spaceId";
   const scoreField = "score";
-  const answerAppId = 1725;
+  const answerAppId = 453;
   const prefix = "a_";
 
   const getAllRecords = (app) => {
