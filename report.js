@@ -38,12 +38,8 @@
         true
       )}?app=${statisticsAppId}&query=${encodeURIComponent(query)}`;
 
-      console.log(url);
-
       const result = await kintone.proxy(url, "GET", getHeaders, {});
-      console.log(result);
       const { records } = JSON.parse(result[0]);
-      console.log(records);
 
       //根据查询结果，添加或者更新答案记录
       const method = records.length > 0 ? "PUT" : "POST";
