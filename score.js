@@ -51,14 +51,14 @@
     //放置按钮
     const button = document.createElement("button");
     button.id = "score";
-    button.innerText = "批改";
+    button.innerText = "一键批改";
     button.onclick = () => {
       setScore().then(() => {
         alert("批改完成");
         window.location.reload();
       });
     };
-    kintone.app.getHeaderSpaceElement().appendChild(button);
+    kintone.app.getHeaderMenuSpaceElement().appendChild(button);
     return event;
   });
 })();
