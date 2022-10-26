@@ -2,6 +2,7 @@
   "use strict";
   const spaceIdField = "spaceId";
   const userField = "user";
+  const dateField = "date";
   const statisticsAppId = 452;
   const prefix = "a_";
   const token = "wq7qQf05coYQFC1FLms4yE4mwUUKIVU8fxufJjIk";
@@ -27,6 +28,19 @@
           };
         }
       });
+
+      const date = new Date();
+      var y = date.getUTCFullYear();
+      var m = date.getUTCMonth() + 1;
+      var d = date.getUTCDate();
+      var h = date.getUTCHours();
+      var M = date.getUTCMinutes();
+      var s = date.getUTCSeconds();
+      const utcDate = `${y}-${m}-${d}T${h}:${M}:${s}Z`;
+
+      answerRecord[dateField] = {
+        value: utcDate,
+      };
 
       //根据spaceid查询是否已经有记录
       const getHeaders = {
