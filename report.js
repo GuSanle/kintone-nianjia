@@ -8,7 +8,11 @@
   const token = "wq7qQf05coYQFC1FLms4yE4mwUUKIVU8fxufJjIk";
 
   kintone.events.on(
-    ["app.record.create.submit.success", "app.record.edit.submit.success"],
+    [
+      "app.record.create.submit.success",
+      "app.record.edit.submit.success",
+      "app.record.index.edit.submit.success",
+    ],
     async (event) => {
       // 获取spaceid
       const appId = kintone.app.getId();
