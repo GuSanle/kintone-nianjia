@@ -78,7 +78,7 @@
 
         // 10 通过记录id来更新年假管理应用  请参考 https://cybozudev.kf5.com/hc/kb/article/1303627/
         return kintone
-          .api(kintone.api.url("/k/v1/record", true), ⑩, updateInfo)
+          .api(kintone.api.url("/k/v1/record", true), "⑩", updateInfo)
           .then(() => {
             alert("更新成功");
             return event;
